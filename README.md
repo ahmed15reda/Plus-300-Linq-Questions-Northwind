@@ -45,7 +45,7 @@ To get started with the LINQ exercises:
 
 1. Clone this repository to your local machine:
 ```bash
-git clone https://github.com/yourusername/your-repository.git
+git clone https://github.com/ahmed15reda/Plus-300-Linq-Questions-Northwind.git
 ```
 2. Open the project in Visual Studio or your preferred C# IDE.
 
