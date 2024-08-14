@@ -1,74 +1,154 @@
-﻿namespace Northwind
+﻿using static Northwind.DataLists;
+namespace Northwind
 {
     internal class Program
     {
         private static void Main(string[] args)
         {
             #region Easy
-            // Retrieve all products with a unit price greater than $50.
-               
-            // List the names of all customers from London.
-               
-            // Find all orders shipped by "Speedy Express".
-               
-            // Get the total number of orders placed by customer "ALFKI".
-               
-            // List all employees who are managers.
-               
+            #region Retrieve all products with a unit price greater than $50.
+            //var products = Products.Where(product => product.UnitPrice > 50);
+
+            //products = from product in Products
+            //           where product.UnitPrice > 50
+            //           select product;
+
+            //foreach (var product in products)
+            //    Console.WriteLine(product);
+            #endregion
+
+            #region List the names of all customers from London.
+            //var londonCustomerNames = Customers.Where(customer => customer.City == "London").Select(customer => customer.CompanyName);
+
+            //londonCustomerNames = from customer in Customers
+            //                      where customer.City == "London"
+            //                      select customer.CompanyName;
+
+            //foreach (var customerName in londonCustomerNames)
+            //    Console.WriteLine(customerName);
+            #endregion
+
+            #region Find all orders shipped by "Speedy Express".
+            /// There is a relationship between Shipper (PK => ShipperID) and Order (FK => ShipVia)
+
+            /// Join With Fluent Syntax is more complex and less readable than Query Syntax
+            /// It has Outer Entity (Orders)
+            /// Inner Entity (Shippers)
+            /// Outer Key Selector (FK Which Order Entity Has => ShipVia)
+            /// Inner Key Selector (PK Which Shipper Entity Has => ShipperID)
+            /// Result Selector => (order, shipper) => new { Order = order, Shipper = shipper }
+
+            //var orders = Orders.Join(Shippers,
+            //                        order => order.ShipVia,
+            //                        shipper => shipper.ShipperID,
+            //                        (order, shipper) => new { Order = order, Shipper = shipper })
+            //                   .Where(x => x.Shipper.CompanyName == "Speedy Express")
+            //                   .Select(x => x.Order);
+
+            //var orders = from order in Orders
+            //         join shipper in Shippers
+            //         on order.ShipVia equals shipper.ShipperID
+            //         where shipper.CompanyName == "Speedy Express"
+            //         select order;
+
+            //foreach (var order in orders) 
+            //    Console.WriteLine(order);
+            #endregion
+
+            #region Get the total number of orders placed by customer "BONAP".
+            //var ordersCount = Orders.Where(order => order.CustomerID == "BONAP").Count();
+
+            //ordersCount = (from order in Orders
+            //               where order.CustomerID == "BONAP"
+            //               select order).Count();
+
+            //Console.WriteLine(ordersCount);
+            #endregion
+
+            #region List all employees who are managers.
+            // Self Relationship represented at the FK => ReportsTo
+            //var managers = Employees.Where(employee => Employees.Any(e => e.ReportsTo == employee.EmployeeID));
+
+            //managers = from employee in Employees
+            //           where Employees.Any(e => e.ReportsTo == employee.EmployeeID)
+            //           select employee;
+
+            /// There is another way to get the same result by getting all managers ids from ReportsTo Column (Keep in Mind it is nullable)
+            //var managerIds = Employees.Where(e => e.ReportsTo.HasValue)
+            //                          .Select(e => e.ReportsTo.Value)
+            //                          .Distinct(); // Distinct because there will be redundant values
+
+            /// That will get us a list of all managers ids , now we need the data for each one of them
+            /// So we will check if the managerIds list contains the id of the employee from Employee List
+            //var managers = Employees.Where(employee => managerIds.Contains(employee.EmployeeID));
+
+            /// The Query Syntax Version
+            //var managerIds = (from e in Employees
+            //                  where e.ReportsTo.HasValue
+            //                  select e.ReportsTo.Value).Distinct();
+
+            //var managers = from employee in Employees
+            //               where managerIds.Contains(employee.EmployeeID)
+            //               select employee;
+
+            //foreach (var manager in managers)
+            //    Console.WriteLine(manager);
+            #endregion
+
             // Find products that are discontinued.
-               
+
             // Retrieve the names and phone numbers of all suppliers.
-               
+
             // Get all orders placed in the year 1996.
-               
+
             // Find all customers in the "USA".
-               
+
             // List products that belong to category "Beverages".
-               
-            // Retrieve orders with a freight cost less than $10.
-               
+
+            // Retrieve orders with a freight cost less than 10.
+
             // Get the names and titles of all employees.
-               
+
             // Find suppliers from "Germany".
-               
+
             // List all products with quantities between 10 and 50.
-               
+
             // Retrieve orders that were shipped but not yet delivered.
-               
+
             // Get the total number of products in each category.
-               
+
             // List all orders placed by employee with ID 5.
-               
+
             // Find the name of the supplier with the highest ID.
-               
+
             // Retrieve products that have "Box" in their quantity per unit description.
-               
+
             // List all customers from "Germany".
-               
+
             // Find all products that have never been ordered.
-               
-            // Get all orders with a freight cost greater than $50.
-               
+
+            // Get all orders with a freight cost greater than 50.
+
             // Retrieve names of all categories.
-               
+
             // List all orders where the ship city is "Seattle".
-               
+
             // Find the employees who have "Sales" in their title.
-               
+
             // Retrieve orders that were placed in the month of June.
-               
+
             // Get the names and phone numbers of suppliers from "Italy".
-               
-            // List all products with unit prices less than $20.
-               
+
+            // List all products with unit prices less than 20.
+
             // Find orders that were shipped in 1997.
-               
+
             // Retrieve the names of all customers who have placed more than 5 orders.
-               
+
             // List products with no quantity on order.
-               
+
             // Get all categories with more than 10 products.
-               
+
             // Find the customer with the most recent order.
 
             // Retrieve employees who work in "Sales".

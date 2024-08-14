@@ -13,5 +13,10 @@
         public string Country { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
+
+        public override string ToString()
+        {
+            return $"CustomerID: {CustomerID}, CompanyName: {CompanyName}, ContactName: {ContactName}, ContactTitle: {ContactTitle}, Address: {Address}, City: {City}, Region: {Region}, PostalCode: {PostalCode}, Country: {Country}, Phone: {Phone}, Fax: {Fax}";
+        }
     }
 }

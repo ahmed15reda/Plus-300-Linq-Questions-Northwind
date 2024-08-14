@@ -20,5 +20,10 @@
         public string Notes { get; set; }
         public int? ReportsTo { get; set; }
         public string PhotoPath { get; set; }
+
+        public override string ToString()
+        {
+            return $"EmployeeID: {EmployeeID}, LastName: {LastName}, FirstName: {FirstName}, Title: {Title}, TitleOfCourtesy: {TitleOfCourtesy}, BirthDate: {BirthDate}, HireDate: {HireDate}, Address: {Address}, City: {City}, Region: {Region}, PostalCode: {PostalCode}, Country: {Country}, HomePhone: {HomePhone}, Extension: {Extension}, Photo: {Photo}, Notes: {Notes}, ReportsTo: {ReportsTo}, PhotoPath: {PhotoPath}";
+        }
     }
 }

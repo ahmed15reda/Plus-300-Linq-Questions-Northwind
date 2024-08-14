@@ -16,5 +16,10 @@
         public string ShipRegion { get; set; }
         public string ShipPostalCode { get; set; }
         public string ShipCountry { get; set; }
+
+        public override string ToString()
+        {
+            return $"OrderID: {OrderID}, CustomerID: {CustomerID}, EmployeeID: {EmployeeID}, OrderDate: {OrderDate}, RequiredDate: {RequiredDate}, ShippedDate: {ShippedDate}, ShipVia: {ShipVia}, Freight: {Freight}, ShipName: {ShipName}, ShipAddress: {ShipAddress}, ShipCity: {ShipCity}, ShipRegion: {ShipRegion}, ShipPostalCode: {ShipPostalCode}, ShipCountry: {ShipCountry}";
+        }
     }
 }

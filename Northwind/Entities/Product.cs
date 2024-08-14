@@ -12,5 +12,10 @@
         public short UnitsOnOrder { get; set; }
         public short ReorderLevel { get; set; }
         public bool Discontinued { get; set; }
+
+        public override string ToString()
+        {
+            return $"ProductID: {ProductID}, ProductName: {ProductName}, SupplierID: {SupplierID}, CategoryID: {CategoryID}, QuantityPerUnit: {QuantityPerUnit}, UnitPrice: {UnitPrice:C}, UnitsInStock: {UnitsInStock}, UnitsOnOrder: {UnitsOnOrder}, ReorderLevel: {ReorderLevel}, Discontinued: {Discontinued}";
+        }
     }
 }
