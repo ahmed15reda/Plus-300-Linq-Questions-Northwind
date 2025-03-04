@@ -18,7 +18,7 @@
         public string Extension { get; set; }
         public string Photo { get; set; }
         public string Notes { get; set; }
-        public int? ReportsTo { get; set; }
+        public int? ReportsTo { get; set; } // Self Relationship
         public string PhotoPath { get; set; }
 
         public override string ToString()

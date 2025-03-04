@@ -1,4 +1,6 @@
-﻿using static Northwind.DataLists;
+﻿using Northwind.Entities;
+using System.Security.Cryptography;
+using static Northwind.DataLists;
 namespace Northwind
 {
     internal class Program
@@ -7,133 +9,373 @@ namespace Northwind
         {
             #region Easy
             #region Retrieve all products with a unit price greater than $50.
-            //var products = Products.Where(product => product.UnitPrice > 50);
+            //var products = Products.Where(x => x.UnitPrice > 50);
 
             //products = from product in Products
             //           where product.UnitPrice > 50
             //           select product;
 
-            //foreach (var product in products)
-            //    Console.WriteLine(product);
+            //foreach (var item in products)
+            //{
+            //    Console.WriteLine(item);
+            //}
             #endregion
 
             #region List the names of all customers from London.
-            //var londonCustomerNames = Customers.Where(customer => customer.City == "London").Select(customer => customer.CompanyName);
+            //var customers = Customers.Where(x => x.City == "London").Select(x => x.CompanyName);
 
-            //londonCustomerNames = from customer in Customers
-            //                      where customer.City == "London"
-            //                      select customer.CompanyName;
+            //customers = from customer in Customers
+            //            where customer.City == "London"
+            //            select customer.CompanyName;
 
-            //foreach (var customerName in londonCustomerNames)
-            //    Console.WriteLine(customerName);
+            //foreach (var item in customers)
+            //{
+            //    Console.WriteLine(item);
+            //}
             #endregion
 
             #region Find all orders shipped by "Speedy Express".
-            /// There is a relationship between Shipper (PK => ShipperID) and Order (FK => ShipVia)
-
-            /// Join With Fluent Syntax is more complex and less readable than Query Syntax
-            /// It has Outer Entity (Orders)
-            /// Inner Entity (Shippers)
-            /// Outer Key Selector (FK Which Order Entity Has => ShipVia)
-            /// Inner Key Selector (PK Which Shipper Entity Has => ShipperID)
-            /// Result Selector => (order, shipper) => new { Order = order, Shipper = shipper }
-
             //var orders = Orders.Join(Shippers,
-            //                        order => order.ShipVia,
+            //                        order => order.ShipperID,
             //                        shipper => shipper.ShipperID,
-            //                        (order, shipper) => new { Order = order, Shipper = shipper })
-            //                   .Where(x => x.Shipper.CompanyName == "Speedy Express")
-            //                   .Select(x => x.Order);
+            //                        (order, shipper) => new
+            //                        {
+            //                            Order = order,
+            //                            Shipper = shipper
+            //                        }).Where(x => x.Shipper.CompanyName == "Speedy Express").Select(x => x.Order);
 
-            //var orders = from order in Orders
+            //orders = from order in Orders
             //         join shipper in Shippers
-            //         on order.ShipVia equals shipper.ShipperID
+            //         on order.ShipperID equals shipper.ShipperID
             //         where shipper.CompanyName == "Speedy Express"
             //         select order;
 
-            //foreach (var order in orders) 
-            //    Console.WriteLine(order);
+            //foreach (var item in orders)
+            //{
+            //    Console.WriteLine(item);
+            //}
             #endregion
 
             #region Get the total number of orders placed by customer "BONAP".
-            //var ordersCount = Orders.Where(order => order.CustomerID == "BONAP").Count();
+            //var count = Orders.Where(x => x.CustomerID == "BONAP").Count();
+            //count = Orders.Count(x => x.CustomerID == "BONAP");
 
-            //ordersCount = (from order in Orders
-            //               where order.CustomerID == "BONAP"
-            //               select order).Count();
+            //count = (from order in Orders
+            //         where order.CustomerID == "BONAP"
+            //         select order).Count();
 
-            //Console.WriteLine(ordersCount);
+            //Console.WriteLine(count);
             #endregion
 
             #region List all employees who are managers.
-            // Self Relationship represented at the FK => ReportsTo
-            //var managers = Employees.Where(employee => Employees.Any(e => e.ReportsTo == employee.EmployeeID));
+            //var managers = Employees.Where(x => Employees.Any(e => e.ReportsTo == x.EmployeeID));
 
             //managers = from employee in Employees
             //           where Employees.Any(e => e.ReportsTo == employee.EmployeeID)
             //           select employee;
 
-            /// There is another way to get the same result by getting all managers ids from ReportsTo Column (Keep in Mind it is nullable)
-            //var managerIds = Employees.Where(e => e.ReportsTo.HasValue)
-            //                          .Select(e => e.ReportsTo.Value)
-            //                          .Distinct(); // Distinct because there will be redundant values
+            //var managersIDs = Employees.Where(x => x.ReportsTo.HasValue)
+            //    .Select(x => x.ReportsTo.Value).Distinct();
 
-            /// That will get us a list of all managers ids , now we need the data for each one of them
-            /// So we will check if the managerIds list contains the id of the employee from Employee List
-            //var managers = Employees.Where(employee => managerIds.Contains(employee.EmployeeID));
+            //var managers = from e in Employees
+            //               where managersIDs.Contains(e.EmployeeID)
+            //               select e;
 
-            /// The Query Syntax Version
-            //var managerIds = (from e in Employees
-            //                  where e.ReportsTo.HasValue
-            //                  select e.ReportsTo.Value).Distinct();
-
-            //var managers = from employee in Employees
-            //               where managerIds.Contains(employee.EmployeeID)
-            //               select employee;
-
-            //foreach (var manager in managers)
-            //    Console.WriteLine(manager);
+            //foreach (var item in managers)
+            //{
+            //    Console.WriteLine(item);
+            //}
             #endregion
 
-            // Find products that are discontinued.
+            #region Find products that are discontinued.
+            //var products = Products.Where(x => x.Discontinued);
 
-            // Retrieve the names and phone numbers of all suppliers.
+            //products = from product in Products
+            //           where product.Discontinued
+            //           select product;
 
-            // Get all orders placed in the year 1996.
+            //foreach (var item in products)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
 
-            // Find all customers in the "USA".
+            #region Retrieve the names and phone numbers of all suppliers.
+            //var suppliers = Suppliers.Select(x => new { x.CompanyName, x.Phone });
 
-            // List products that belong to category "Beverages".
+            //suppliers = from supplier in Suppliers
+            //            select new
+            //            {
+            //                supplier.CompanyName,
+            //                supplier.Phone
+            //            };
 
-            // Retrieve orders with a freight cost less than 10.
+            //foreach (var item in suppliers)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
 
-            // Get the names and titles of all employees.
+            #region Get all orders placed in the year 1997.
+            //var orders = Orders.Where(x => x.OrderDate.Year == 1997);
 
-            // Find suppliers from "Germany".
+            //orders = from order in Orders
+            //         where order.OrderDate.Year == 1997
+            //         select order;
 
-            // List all products with quantities between 10 and 50.
+            //foreach (var item in orders)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
 
-            // Retrieve orders that were shipped but not yet delivered.
+            #region Find all customers in the "USA".
+            //var customers = Customers.Where(x => x.Country == "USA");
 
-            // Get the total number of products in each category.
+            //customers = from customer in Customers
+            //            where customer.Country == "USA"
+            //            select customer;
 
-            // List all orders placed by employee with ID 5.
+            //foreach (var item in customers)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
 
-            // Find the name of the supplier with the highest ID.
+            #region List products that belong to category "Beverages".
+            //var products = Products.Join(Categories,
+            //                            p => p.CategoryID,
+            //                            c => c.CategoryID,
+            //                            (p, c) => new
+            //                            {
+            //                                Product = p,
+            //                                Category = c
+            //                            }).Where(x => x.Category.CategoryName == "Beverages")
+            //                            .Select(x => x.Product);
 
-            // Retrieve products that have "Box" in their quantity per unit description.
+            //products = from product in Products
+            //           join category in Categories
+            //           on product.CategoryID equals category.CategoryID
+            //           where category.CategoryName == "Beverages"
+            //           select product;
 
-            // List all customers from "Germany".
+            //foreach (var item in products)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
 
-            // Find all products that have never been ordered.
+            #region Retrieve orders with a freight cost less than 20.
+            //var orders = Orders.Where(x => x.Freight < 20);
 
-            // Get all orders with a freight cost greater than 50.
+            //orders = from order in Orders
+            //         where order.Freight < 20
+            //         select order;
 
-            // Retrieve names of all categories.
+            //foreach (var item in orders)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
 
-            // List all orders where the ship city is "Seattle".
+            #region Get the names and titles of all employees.
+            //var employees = Employees.Select(x => new { x.FirstName, x.LastName, x.Title });
 
-            // Find the employees who have "Sales" in their title.
+            //employees = from employee in Employees
+            //            select new { employee.FirstName, employee.LastName, employee.Title };
+
+            //foreach (var item in employees)
+            //{
+            //    Console.WriteLine(item);
+            //}
+
+            #endregion
+
+            #region Find suppliers from "Germany".
+            //var suppliers = Suppliers.Where(x => x.Country == "Germany");
+
+            //suppliers = from supplier in Suppliers
+            //            where supplier.Country == "Germany"
+            //            select supplier;
+
+            //foreach (var item in suppliers)
+            //{
+            //    Console.WriteLine(item);
+            //}
+
+            #endregion
+
+            #region List all products with quantities between 10 and 50.
+            //var products = Products.Where(x => x.UnitsInStock >= 10 && x.UnitsInStock <= 50);
+
+            //products = from product in Products
+            //           where product.UnitsInStock >= 10 && product.UnitsInStock <= 50
+            //           select product;
+
+            //foreach (var item in products)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+            #region Retrieve orders that were shipped but not yet delivered.
+            //var orders = Orders.Where(x => x.ShippedDate.HasValue && x.RequiredDate > DateTime.Now);
+
+            //foreach (var item in orders)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+            #region Get the total number of products in each category.
+            //var products = Products.GroupBy(x => x.CategoryID)
+            //                       .Select(group => new
+            //                       {
+            //                           CategoryId = group.Key,
+            //                           Count = group.Count()
+            //                       });
+
+            //products = from product in Products
+            //           group product by product.CategoryID into CatGroup
+            //           select new
+            //           {
+            //               CategoryId = CatGroup.Key,
+            //               Count = Categories.Count()
+            //           };
+
+            //foreach (var item in products)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+            #region List all orders placed by employee with ID 5.
+            //var orders = Orders.Where(x => x.EmployeeID == 5);
+
+            //orders = from order in Orders
+            //         where order.EmployeeID == 5
+            //         select order;
+
+            //foreach (var item in orders)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+            #region Find the name of the supplier with the highest ID.
+            //var supplier = Suppliers.FirstOrDefault(x => x.SupplierID == Suppliers.Max(x => x.SupplierID)).CompanyName;
+
+            //supplier = Suppliers.OrderByDescending(x => x.SupplierID).Select(x => x.CompanyName).FirstOrDefault();
+
+            //supplier = (from sup in Suppliers
+            //            orderby sup.SupplierID descending
+            //            select sup.CompanyName).FirstOrDefault();
+
+            //Console.WriteLine(supplier);
+            #endregion
+
+            #region Retrieve products that have "box" in their quantity per unit description.
+            //var products = Products.Where(x => x.QuantityPerUnit.Contains("box"));
+
+            //products = from product in Products
+            //           where product.QuantityPerUnit.Contains("box")
+            //           select product;
+
+            //foreach (var item in products)
+            //{
+            //    Console.WriteLine(item);
+            //}
+
+            #endregion
+
+            #region List all customers from "Germany".
+            //var customers = Customers
+            //.Where(c => c.Country == "Germany")
+            //.ToList();
+
+            // customers = (from c in Customers
+            //                            where c.Country == "Germany"
+            //                            select c).ToList();
+
+            #endregion
+
+            #region Find all products that have never been ordered.
+            //var products = Products.Where(p => !OrderDetails.Any(od => od.ProductID == p.ProductID));
+
+            //var products = Products.GroupJoin(OrderDetails,
+            //                                p => p.ProductID,
+            //                                od => od.ProductID,
+            //                                (p, od) => new
+            //                                {
+            //                                    Product = p,
+            //                                    Orders = od
+            //                                }).Where(x => !x.Orders.Any())
+            //                                .Select(x => x.Product);
+
+            //products = from product in Products 
+            //           join orderDetail in OrderDetails
+            //           on product.ProductID equals orderDetail.ProductID into orderGroup
+            //           where !orderGroup.Any()
+            //           select product;
+
+            //foreach (var item in products)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+            #region Get all orders with a freight cost greater than 50.
+            //var orders = Orders.Where(x => x.Freight > 50);
+
+            //orders = from order in Orders
+            //         where order.Freight > 50
+            //         select order;
+
+            //foreach (var item in orders)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
+
+            #region Retrieve names of all categories.
+            //var categories = Categories.Select(x => x.CategoryName);
+
+            //categories = from category in Categories
+            //             select category.CategoryName;
+
+            //foreach (var item in categories)
+            //{
+            //    Console.WriteLine(item);
+            //}
+
+            #endregion
+
+            #region List all orders where the ship city is "Mannheim".
+            //var orders = Orders.Where(x => x.ShipCity == "Mannheim");
+
+            //orders = from order in Orders
+            //         where order.ShipCity == "Mannheim"
+            //         select order;
+
+            //foreach (var item in orders)
+            //{
+            //    Console.WriteLine(item);
+            //}
+
+            #endregion
+
+            #region Find the employees who have "Sales" in their title.
+            //var employees = Employees.Where(x => x.Title.Contains("Sales"));
+
+            //employees = from employee in Employees
+            //            where employee.Title.Contains("Sales")
+            //            select employee;
+
+            //foreach (var item in employees)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            #endregion
 
             // Retrieve orders that were placed in the month of June.
 
@@ -265,7 +507,7 @@ namespace Northwind
 
             // Find customers who live in cities starting with "S".
 
-            // Get the total number of products for each supplier.
+            // Get The total number of products for each supplier.
 
             // List all orders where the freight cost is exactly $15.
 
@@ -288,11 +530,44 @@ namespace Northwind
             #endregion Easy
 
             #region Medium
-            // List all products whose unit price is higher than the average unit price of all products.
 
-            // Retrieve the top 5 customers who have placed the highest number of orders.
+            #region List all products whose unit price is higher than the average unit price of all products.
+            //var averageUnitPrice = Products.Average(x => x.UnitPrice);
 
-            // Find all employees who have processed orders in more than 3 different countries.
+            //var products = Products.Where(x => x.UnitPrice > averageUnitPrice).ToList();
+
+            //foreach (var product in products)
+            //    Console.WriteLine(product); 
+            #endregion
+
+            #region Retrieve the top 5 customers who have placed the highest number of orders.
+            //var customers = (from customer in Customers
+            //                 join order in Orders
+            //                 on customer.CustomerID equals order.CustomerID
+            //                 group order by customer.CustomerID
+            //                /// For more clarifications you can group by ContactName also like below
+            //                /// group order by new { customer.CustomerID, customer.ContactName }
+            //                into CustomerGroup
+            //                 orderby CustomerGroup.Count() descending
+            //                 select new
+            //                 {
+            //                     /// if you have more than property at the group by clause 
+            //                     /// you can read it as below
+            //                     /// CustomerId = CustomerGroup.Key.CustomerId 
+            //                     CustomerId = CustomerGroup.Key,
+            //                     NumberOfOrders = CustomerGroup.Count()
+            //                 }).Take(5);
+
+            //foreach (var customer in customers)
+            //    Console.WriteLine(customer); 
+            #endregion
+
+            #region Find all employees who have processed orders in more than 3 different countries.
+            //var employees = Orders.GroupBy(x => new { x.EmployeeID, x.ShipCountry }).Select(x => new { x.Key.EmployeeID, x.Key.ShipCountry }).ToList();
+
+            //foreach (var employee in employees)
+            //    Console.WriteLine(employee);
+            #endregion
 
             // Get the total number of orders shipped by each shipper.
 
@@ -693,6 +968,8 @@ namespace Northwind
 
 
             #endregion Hard
+
+
         }
     }
 }

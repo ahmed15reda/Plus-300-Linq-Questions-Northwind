@@ -8,7 +8,7 @@
         public DateTime OrderDate { get; set; }
         public DateTime RequiredDate { get; set; }
         public DateTime? ShippedDate { get; set; }
-        public int ShipVia { get; set; }
+        public int ShipperID { get; set; }
         public decimal Freight { get; set; }
         public string ShipName { get; set; }
         public string ShipAddress { get; set; }
@@ -19,7 +19,7 @@
 
         public override string ToString()
         {
-            return $"OrderID: {OrderID}, CustomerID: {CustomerID}, EmployeeID: {EmployeeID}, OrderDate: {OrderDate}, RequiredDate: {RequiredDate}, ShippedDate: {ShippedDate}, ShipVia: {ShipVia}, Freight: {Freight}, ShipName: {ShipName}, ShipAddress: {ShipAddress}, ShipCity: {ShipCity}, ShipRegion: {ShipRegion}, ShipPostalCode: {ShipPostalCode}, ShipCountry: {ShipCountry}";
+            return $"OrderID: {OrderID}, CustomerID: {CustomerID}, EmployeeID: {EmployeeID}, OrderDate: {OrderDate}, RequiredDate: {RequiredDate}, ShippedDate: {ShippedDate}, ShipVia: {ShipperID}, Freight: {Freight}, ShipName: {ShipName}, ShipAddress: {ShipAddress}, ShipCity: {ShipCity}, ShipRegion: {ShipRegion}, ShipPostalCode: {ShipPostalCode}, ShipCountry: {ShipCountry}";
         }
     }
 }
