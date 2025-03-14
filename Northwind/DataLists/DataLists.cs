@@ -556,7 +556,7 @@ namespace Northwind
             new OrderDetail { OrderID = 49, ProductID = 98, UnitPrice = 50.00m, Quantity = 3, Discount = 0.0f },
             new OrderDetail { OrderID = 50, ProductID = 99, UnitPrice = 60.00m, Quantity = 2, Discount = 0.1f },
             new OrderDetail { OrderID = 50, ProductID = 100, UnitPrice = 70.00m, Quantity = 1, Discount = 0.15f },
-            new OrderDetail { OrderID = 51, ProductID = 1, UnitPrice = 10.00m, Quantity = 5, Discount = 0.1f },
+            new OrderDetail { OrderID = 51, ProductID = 1, UnitPrice = 10.00m, Quantity = 50, Discount = 0.1f },
             new OrderDetail { OrderID = 51, ProductID = 2, UnitPrice = 15.00m, Quantity = 3, Discount = 0.0f },
             new OrderDetail { OrderID = 52, ProductID = 3, UnitPrice = 20.00m, Quantity = 2, Discount = 0.05f },
             new OrderDetail { OrderID = 52, ProductID = 4, UnitPrice = 30.00m, Quantity = 1, Discount = 0.0f },
